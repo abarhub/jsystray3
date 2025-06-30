@@ -4,6 +4,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Objects;
 import java.util.Properties;
 
@@ -19,9 +21,9 @@ public class Main {
             // Load properties from resources
             Properties props = new Properties();
             boolean configTrouve = false;
-            if (args.length > 1 && Objects.equals(args[1], "--config")) {
-                String configFile = args[0];
-                try (InputStream input = Main.class.getClassLoader().getResourceAsStream(configFile)) {
+            if (args.length > 1 && Objects.equals(args[0], "--config")) {
+                String configFile = args[1];
+                try (InputStream input = Files.newInputStream(Path.of(configFile))) {
                     props.load(input);
                     configTrouve = true;
                 }
@@ -64,7 +66,8 @@ public class Main {
 
     private static void runCommand(String command) {
         try {
-            Runtime.getRuntime().exec(command);
+            String[] tab=command.split(" ");
+            Runtime.getRuntime().exec(tab);
         } catch (IOException e) {
             e.printStackTrace();
         }

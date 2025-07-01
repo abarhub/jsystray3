@@ -66,7 +66,7 @@ public class Main {
 
     private static void runCommand(String command) {
         try {
-            String[] tab=command.split(" ");
+            String[] tab = SplitUtils.split(command);
             Runtime.getRuntime().exec(tab);
         } catch (IOException e) {
             e.printStackTrace();

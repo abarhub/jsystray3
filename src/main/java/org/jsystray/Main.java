@@ -32,10 +32,14 @@ public class Main {
             PopupMenu popup = new PopupMenu();
 
             for (String key : props.keySet()) {
-                String command = props.get(key);
-                MenuItem item = new MenuItem(key);
-                item.addActionListener((ActionEvent e) -> runCommand(command));
-                popup.add(item);
+                if(key.startsWith("separator")){
+                    popup.addSeparator();
+                } else {
+                    String command = props.get(key);
+                    MenuItem item = new MenuItem(key);
+                    item.addActionListener((ActionEvent e) -> runCommand(command));
+                    popup.add(item);
+                }
             }
 
             // Exit menu item

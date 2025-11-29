@@ -55,7 +55,6 @@ public class Main {
     }
 
     private static Map<String, String> loadProperties(String[] args) throws IOException {
-        boolean configTrouve = false;
         if (args.length > 1 && Objects.equals(args[0], "--config")) {
             String configFile = args[1];
             try (InputStream input = Files.newInputStream(Path.of(configFile))) {
@@ -63,12 +62,9 @@ public class Main {
             }
         }
 
-        if (!configTrouve) {
-            try (InputStream input = Main.class.getClassLoader().getResourceAsStream("commands.properties")) {
-                return loadProperties(input);
-            }
+        try (InputStream input = Main.class.getClassLoader().getResourceAsStream("commands.properties")) {
+            return loadProperties(input);
         }
-        return Map.of();
     }
 
     private static void runCommand(String command) {
@@ -86,9 +82,9 @@ public class Main {
         try (var lines = buffer.lines()) {
             return lines
                     .filter(x -> x != null && !x.isBlank())
-                    .filter(x -> x.trim().startsWith("#"))
+                    .filter(x -> !x.trim().startsWith("#"))
                     .map(Main::split)
-                    .filter(x -> x.size() != 2)
+                    .filter(x -> x.size() == 2)
                     .collect(Collectors.toMap(List::getFirst,
                             List::getLast,
                             (e1, e2) -> {
